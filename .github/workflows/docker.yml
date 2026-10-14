@@ -17,6 +17,9 @@ jobs:
       - name: Eliminar contenedor anterior
         run: docker rm -f ipod-classic || true
 
+      - name: step1.2
+        run: docker build -t image-ipod-c2 .
+
       - name: Ejecutar contenedor
         run: docker run -d --name ipod-classic -p 8080:80 ipod-classic:latest
 

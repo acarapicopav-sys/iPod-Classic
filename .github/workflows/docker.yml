@@ -1,0 +1,27 @@
+name: Docker Pipeline
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-run-verify:
+    runs-on: self-hosted
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Construir imagen
+        run: docker build -t ipod-classic:latest .
+
+      - name: Eliminar contenedor anterior
+        run: docker rm -f ipod-classic || true
+
+      - name: Ejecutar contenedor
+        run: docker run -d --name ipod-classic -p 8080:80 ipod-classic:latest
+
+      - name: Verificar que responde
+        run: |
+          sleep 5
+          curl -f http://localhost:8080
+          docker ps --filter name=ipod-classic
